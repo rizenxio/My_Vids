@@ -1,26 +1,66 @@
-import { TouchableOpacity, Text,StyleSheet } from "react-native";
-import React from "react";
+import React from 'react';
+import { ActivityIndicator, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
-const CustomBtn = () => {
+const CustomButton = ({
+  title,
+  handlePress,
+  containerStyles,
+  textStyles,
+  isLoading,
+}) => {
   return (
-    <TouchableOpacity style={styles.btnc}>
-      <Text>customButton</Text>
+    <TouchableOpacity
+      onPress={handlePress}
+      activeOpacity={0.7}
+      style={[
+        styles.button,
+        containerStyles,
+        isLoading ? styles.buttonLoading : null
+      ]}
+      disabled={isLoading}
+    >
+      <View style={styles.contentContainer}>
+        <Text style={[styles.text, textStyles]}>
+          {title}
+        </Text>
+
+        {isLoading && (
+          <ActivityIndicator
+            animating={isLoading}
+            color="#fff"
+            size="small"
+            style={styles.indicator}
+          />
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
 
-export default CustomBtn;
-
 const styles = StyleSheet.create({
-  btnc: {
-    backgroundColor: "#ffa101",
-    marginTop: 50,
-    width: 327,
-    height: 58,
-    backgroundColor: "#ffa101",
-    color: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 30,
+  button: {
+    backgroundColor: '#F59E0B', // bg-secondary
+    borderRadius: 12,
+    minHeight: 62,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  buttonLoading: {
+    opacity: 0.5,
+  },
+  text: {
+    color: '#1F2937', // text-primary
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 18,
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  indicator: {
+    marginLeft: 8,
   },
 });
+
+export default CustomButton;

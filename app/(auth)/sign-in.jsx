@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
+import CustomButton from "../../components/customButton";
+import { Link } from "expo-router";
 const Signin = () => {
-  const [form,setForm] = useState({
-    email: '',
-    password: ''
-  })
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -19,18 +21,42 @@ const Signin = () => {
           />
           <Text style={styles.Teks}>Log in to Aurora</Text>
           <FormField
-          title="email"
-          value={form.email}
-          handleChangeText={(e)=>setForm({ ...form,email:e})}
-          otherStyles={styles.other}
-          keyboardType="email-address"
+            title="email"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
+            otherStyles={styles.other}
+            keyboardType="email-address"
           />
           <FormField
-          title="password"
-          value={form.password}
-          handleChangeText={(e)=>setForm({ ...form,password:e})}
-          otherStyles={styles.other}
+            title="Password"
+            value={form.password}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
+            otherStyles={styles.other}
           />
+          <CustomButton
+            title="Sign in"
+            // handlePress ={submit}
+            containerStyles={styles.other}
+            // isLoading={isSubmitting}
+          />
+          <View
+            style={{
+              justifyContent: "center",
+              paddingTop: 5,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{color:'#fff',fontFamily:'Poppins-Regular'}}>Don't have an account?</Text>
+           <Link href={'/sign-up'} style={{fontFamily:'Poppins-SemiBold', marginLeft: 8, color: "#F59E0B", fontWeight: "600" }}>
+            Sign up
+           </Link>
+            {/* <Text
+              style={{fontFamily:'Poppins-Regular', marginLeft: 8, color: "#F59E0B", fontWeight: "600" }}
+            >
+              Sign up
+            </Text> */}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -40,9 +66,10 @@ const Signin = () => {
 export default Signin;
 
 const styles = StyleSheet.create({
-  other:{
-marginTop:7
-  },  
+  TextAcc: {},
+  other: {
+    marginTop: 7,
+  },
   Teks: {
     marginTop: 40,
     fontSize: 24,

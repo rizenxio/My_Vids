@@ -1,15 +1,36 @@
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/customButton";
-import { Link } from "expo-router";
+import { Link,router } from "expo-router";
+import { signIn } from "../../lib/appwrite";
 const Signin = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submit = async () => {
+    if (!form.email || !form.password) {
+      Alert.alert("Error", "Please fill in all the fields");
+    }
+
+    setIsSubmitting(true);
+    try {
+      await signIn(form.email, form.password);
+
+      //set it to global
+
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+    // createUser();
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -35,9 +56,9 @@ const Signin = () => {
           />
           <CustomButton
             title="Sign in"
-            // handlePress ={submit}
+            handlePress={submit}
             containerStyles={styles.other}
-            // isLoading={isSubmitting}
+            isLoading={isSubmitting}
           />
           <View
             style={{
@@ -47,10 +68,20 @@ const Signin = () => {
               alignItems: "center",
             }}
           >
-            <Text style={{color:'#fff',fontFamily:'Poppins-Regular'}}>Don't have an account?</Text>
-           <Link href={'/sign-up'} style={{fontFamily:'Poppins-SemiBold', marginLeft: 8, color: "#F59E0B", fontWeight: "600" }}>
-            Sign up
-           </Link>
+            <Text style={{ color: "#fff", fontFamily: "Poppins-Regular" }}>
+              Don't have an account?
+            </Text>
+            <Link
+              href="/sign-up"
+              style={{
+                fontFamily: "Poppins-SemiBold",
+                marginLeft: 8,
+                color: "#F59E0B",
+                fontWeight: "600",
+              }}
+            >
+              Sign up
+            </Link>
             {/* <Text
               style={{fontFamily:'Poppins-Regular', marginLeft: 8, color: "#F59E0B", fontWeight: "600" }}
             >

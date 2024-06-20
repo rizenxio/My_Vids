@@ -1,39 +1,50 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { icons } from "../constants"
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { icons } from "../constants";
+import { router, usePathname } from "expo-router";
+import useAppwrite from "../lib/useAppwrite";
+import { searchPost } from "../lib/appwrite";
 
-const SearchInput = ({
-  title,
-  value,
-  placeholder,
-  handleChangeText,
-  otherStyles,
-  ...props
-}) => {
-  const [showPassword, setShowPassword] = useState(true);
-
+const SearchInput = ({ initialQuery }) => {
+  const pathname = usePathname();
+  const [query, setQuery] = useState(initialQuery || "");
   return (
-        <View style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
-          value={value}
+          value={query}
           placeholder="Search for a video topic"
-          placeholderTextColor="#7B7B8B"
-          onChangeText={handleChangeText}
-          secureTextEntry={title === "Password" && !showPassword}
+          placeholderTextColor="#7b7b8b"
+          onChangeText={(e) => setQuery(e)}
         />
         {/* <Image source={icons.eye} /> */}
-       <TouchableOpacity>
-        <Image 
-        source={icons.search}
-        style={{width:20,height:20}}
-        resizeMode='contain'
-        />
-       </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            if (query === "")
+              return Alert.alert(
+                "Missing Query",
+                "Please inpus something to search result across database"
+              );
+            if (pathname.startsWith("/search")) router.setParams({ query });
+            else router.push(`/search/${query}`);
+          }}
+        >
+          <Image
+            source={icons.search}
+            style={{ width: 20, height: 20 }}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
       </View>
-        </View>
-  
+    </View>
   );
 };
 
@@ -43,28 +54,28 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: '#E5E7EB', // text-gray-100
-    fontFamily: 'Poppins-Medium',
+    color: "#E5E7EB", // text-gray-100
+    fontFamily: "Poppins-Medium",
     marginBottom: 8,
   },
   inputContainer: {
-    width: '100%',
+    width: "100%",
     height: 64,
     paddingHorizontal: 16,
-    backgroundColor: '#1F2937', // bg-black-100
+    backgroundColor: "#1F2937", // bg-black-100
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#374151', // border-black-200
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight:16
+    borderColor: "#374151", // border-black-200
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 16,
   },
   textInput: {
-    marginTop:0.5,
-    fontFamily:'Poppins-Regular',
-    color:'#fff',
-    fontSize:16,
-    flex:1
+    marginTop: 0.5,
+    fontFamily: "Poppins-Regular",
+    color: "#fff",
+    fontSize: 16,
+    flex: 1,
   },
   icon: {
     width: 24, // Adjusted to a more typical icon size

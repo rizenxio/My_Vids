@@ -1,5 +1,4 @@
 import {
-  Button,
   Image,
   StyleSheet,
   Text,
